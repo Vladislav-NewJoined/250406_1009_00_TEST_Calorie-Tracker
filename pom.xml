@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.example</groupId>
-	<artifactId>250318_01_00_TEST_Calorie-Tracker_Intern_Java_Developer__1221Sistems_250319_1535_RAB</artifactId>
+	<artifactId>250318_1535_00_TEST_Calorie-Tracker_RAB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>250318_01_00_TEST_Calorie-Tracker_Intern_Java_Developer_ООО_1221Sistems</name>
 	<description>Demo project for Spring Boot</description>
