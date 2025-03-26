@@ -19,10 +19,13 @@ public class ExportController {
     @GetMapping("/excel")
     public String exportToExcel() {
         try {
-            excelExportService.exportToExcel(); // Убрали параметр fileName
+            excelExportService.exportToExcel();
             return "Файл успешно экспортирован.";
         } catch (SQLException | IOException e) {
             e.printStackTrace();
+            if (e.getMessage().contains("Файл занят другим процессом. Закройте файл и попробуйте снова.")) {
+                return "Ошибка: файл занят другим процессом. Закройте файл и попробуйте снова.";
+            }
             return "Ошибка при экспорте данных: " + e.getMessage();
         }
     }
