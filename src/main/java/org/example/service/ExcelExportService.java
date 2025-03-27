@@ -18,7 +18,7 @@ public class ExcelExportService {
 
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
             // Экспорт таблицы Users
-            ExportToExcel.exportTableToExcel(connection, "Users", "Users.xlsx");
+            ExportToExcel.exportTableToExcel(connection, "Пользователи", "Пользователи.xlsx");
         }
     }
 }
