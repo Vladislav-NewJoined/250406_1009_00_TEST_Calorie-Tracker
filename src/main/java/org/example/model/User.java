@@ -6,46 +6,41 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Пользователи") // Явное указание имени таблицы
+@Table(name = "Пользователи") // Имя таблицы на кириллице
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID") // Имя столбца на английском (H2 не поддерживает кириллицу для ID)
     private Long id;
 
     @NotBlank(message = "Имя не может быть пустым")
+    @Column(name = "Имя") // Имя столбца на кириллице
     private String name;
 
     @Email(message = "Некорректный email")
     @NotBlank(message = "Email не может быть пустым")
+    @Column(name = "Email") // Имя столбца на кириллице
     private String email;
 
     @Min(value = 1, message = "Возраст должен быть больше 0")
     @Max(value = 120, message = "Возраст должен быть меньше 120")
+    @Column(name = "Возраст") // Имя столбца на кириллице
     private int age;
 
     @Min(value = 1, message = "Вес должен быть больше 0")
-    private double weight; // в кг
+    @Column(name = "Вес (кг)") // Имя столбца на кириллице
+    private double weight;
 
     @Min(value = 1, message = "Рост должен быть больше 0")
-    private double height; // в см
+    @Column(name = "Рост (см)") // Имя столбца на кириллице
+    private double height;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "Цель") // Имя столбца на кириллице
     private Goal goal;
 
-    @Transient
-    private double dailyCalorieIntake; // Рассчитывается автоматически
-
-    public User() {
-    }
-
-    public User(String name, String email, int age, double weight, double height, Goal goal) {
-        this.name = name;
-        this.email = email;
-        this.age = age;
-        this.weight = weight;
-        this.height = height;
-        this.goal = goal;
-    }
+    @Transient // Вычисляемое поле, не сохраняется в БД
+    private double dailyCalorieIntake;
 
     public enum Goal {
         LOSE_WEIGHT, MAINTAIN_WEIGHT, GAIN_WEIGHT
