@@ -6,18 +6,25 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "Блюда")
 public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ИД")
     private Long id;
 
-    @NotBlank
+    @Column(name = "Название")
     private String name;
 
-    @Min(1)
-    private int caloriesPerServing;
+    @Column(name = "Калории_на_порцию")
+    private Integer caloriesPerServing;
 
-    private double proteins;
-    private double fats;
-    private double carbs;
+    @Column(name = "Белки")
+    private Double proteins;
+
+    @Column(name = "Жиры")
+    private Double fats;
+
+    @Column(name = "Углеводы")
+    private Double carbs;
 }
