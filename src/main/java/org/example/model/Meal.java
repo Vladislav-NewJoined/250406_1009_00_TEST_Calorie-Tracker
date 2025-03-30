@@ -1,30 +1,29 @@
 package org.example.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Блюда")
+@Table(name = "БЛЮДА")
 public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ИД")
     private Long id;
 
-    @Column(name = "Название")
+    @Column(name = "НАЗВАНИЕ")
     private String name;
 
-    @Column(name = "Калории_на_порцию")
+    @Column(name = "КАЛОРИИ_НА_ПОРЦИЮ")
     private Integer caloriesPerServing;
 
-    @Column(name = "Белки")
+    @Column(name = "БЕЛКИ")
     private Double proteins;
 
-    @Column(name = "Жиры")
+    @Column(name = "ЖИРЫ")
     private Double fats;
 
-    @Column(name = "Углеводы")
+    @Column(name = "УГЛЕВОДЫ")
     private Double carbs;
 }
