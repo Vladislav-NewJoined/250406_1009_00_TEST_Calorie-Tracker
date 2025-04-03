@@ -39,10 +39,26 @@ public class User {
     @Column(name = "Цель") // Имя столбца на кириллице
     private Goal goal;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Пол") // Имя столбца на кириллице
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Уровень активности") // Имя столбца на кириллице
+    private ActivityLevel activityLevel;
+
     @Transient // Вычисляемое поле, не сохраняется в БД
     private double dailyCalorieIntake;
 
     public enum Goal {
         LOSE_WEIGHT, MAINTAIN_WEIGHT, GAIN_WEIGHT
+    }
+
+    public enum Gender {
+        MALE, FEMALE
+    }
+
+    public enum ActivityLevel {
+        SEDENTARY, LIGHTLY_ACTIVE, MODERATELY_ACTIVE, VERY_ACTIVE, EXTRA_ACTIVE
     }
 }

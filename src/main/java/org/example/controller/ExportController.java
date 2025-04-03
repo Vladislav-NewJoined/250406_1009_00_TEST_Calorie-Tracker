@@ -19,8 +19,8 @@ public class ExportController {
     @GetMapping("/excel")
     public String exportToExcel() {
         try {
-            excelExportService.exportToExcel();
-            return "Файл успешно экспортирован.";
+            String fileName = excelExportService.exportToExcel();
+            return "Файл успешно экспортирован: " + fileName;
         } catch (SQLException | IOException e) {
             e.printStackTrace();
             if (e.getMessage().contains("Файл занят другим процессом. Закройте файл и попробуйте снова.")) {

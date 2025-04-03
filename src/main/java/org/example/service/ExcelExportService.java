@@ -11,14 +11,18 @@ import java.sql.SQLException;
 @Service
 public class ExcelExportService {
 
-    public void exportToExcel() throws SQLException, IOException {
+    public String exportToExcel() throws SQLException, IOException {
         String jdbcUrl = "jdbc:h2:file:./calorieTrackerDB";
         String username = "sa";
         String password = "";
 
+        String fileName = "Пользователи.xlsx";
+
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
-            // Экспорт таблицы Users
-            ExportToExcel.exportTableToExcel(connection, "Пользователи", "Пользователи.xlsx");
+            // Экспорт таблицы ПОЛЬЗОВАТЕЛИ
+            ExportToExcel.exportTableToExcel(connection, "ПОЛЬЗОВАТЕЛИ", fileName);
         }
+
+        return fileName;
     }
 }

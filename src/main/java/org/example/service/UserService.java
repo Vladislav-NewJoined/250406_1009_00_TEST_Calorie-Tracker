@@ -11,11 +11,11 @@ public class UserService {
     private UserRepository userRepository;
 
     public User addUser(User user) {
-        user.setDailyCalorieIntake(calculateDailyCalorieIntake(user));
+        user.setDailyCalorieIntake(calculateDailyCalories(user));
         return userRepository.save(user);
     }
 
-    private double calculateDailyCalorieIntake(User user) {
+    public double calculateDailyCalories(User user) {
         double bmr = 10 * user.getWeight() + 6.25 * user.getHeight() - 5 * user.getAge();
         switch (user.getGoal()) {
             case LOSE_WEIGHT:

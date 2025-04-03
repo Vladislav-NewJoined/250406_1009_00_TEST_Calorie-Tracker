@@ -1,7 +1,6 @@
 package org.example.util;
 
 import org.apache.poi.ss.usermodel.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,36 +24,36 @@ public class ExportToExcel {
             }
         }
 
-        String query = "SELECT * FROM " + tableName;
+        String query = "SELECT * FROM \"" + tableName + "\"";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Пользователи"); // Название листа на кириллице
+            Sheet sheet = workbook.createSheet(tableName);
 
-            // Заголовки колонок на кириллице
+            // Заголовки колонок
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("ID");
-            headerRow.createCell(1).setCellValue("Имя");
-            headerRow.createCell(2).setCellValue("Email");
-            headerRow.createCell(3).setCellValue("Возраст");
-            headerRow.createCell(4).setCellValue("Вес (кг)");
-            headerRow.createCell(5).setCellValue("Рост (см)");
-            headerRow.createCell(6).setCellValue("Цель");
-            headerRow.createCell(7).setCellValue("Суточная норма калорий");
+            headerRow.createCell(1).setCellValue("ИМЯ");
+            headerRow.createCell(2).setCellValue("EMAIL");
+            headerRow.createCell(3).setCellValue("ЦЕЛЬ");
+            headerRow.createCell(4).setCellValue("рост (см)");
+            headerRow.createCell(5).setCellValue("вес (кг)");
+            headerRow.createCell(6).setCellValue("уровень активности");
+            headerRow.createCell(7).setCellValue("ПОЛ");
 
             // Данные
             int rowIndex = 1;
             while (resultSet.next()) {
                 Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(resultSet.getLong("id"));
-                row.createCell(1).setCellValue(resultSet.getString("name"));
-                row.createCell(2).setCellValue(resultSet.getString("email"));
-                row.createCell(3).setCellValue(resultSet.getInt("age"));
-                row.createCell(4).setCellValue(resultSet.getDouble("weight"));
-                row.createCell(5).setCellValue(resultSet.getDouble("height"));
-                row.createCell(6).setCellValue(resultSet.getString("goal"));
-                row.createCell(7).setCellValue(resultSet.getDouble("dailyCalorieIntake"));
+                row.createCell(0).setCellValue(resultSet.getLong("ID"));
+                row.createCell(1).setCellValue(resultSet.getString("ИМЯ"));
+                row.createCell(2).setCellValue(resultSet.getString("EMAIL"));
+                row.createCell(3).setCellValue(resultSet.getString("ЦЕЛЬ"));
+                row.createCell(4).setCellValue(resultSet.getDouble("рост (см)"));
+                row.createCell(5).setCellValue(resultSet.getDouble("вес (кг)"));
+                row.createCell(6).setCellValue(resultSet.getString("уровень активности"));
+                row.createCell(7).setCellValue(resultSet.getString("ПОЛ"));
             }
 
             // Сохранение в файл
@@ -63,4 +62,5 @@ public class ExportToExcel {
             }
             workbook.close();
         }
-    }}
+    }
+}
