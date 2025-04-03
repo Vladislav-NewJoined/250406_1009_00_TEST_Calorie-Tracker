@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
-    @Query("INSERT INTO User (name, email, goal, height, weight, activityLevel, gender) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
-    void addUser(String name, String email, String goal, double height, double weight, String activityLevel, String gender);
+    @Query(value = "ALTER TABLE ПОЛЬЗОВАТЕЛИ ALTER COLUMN ID RESTART WITH 1", nativeQuery = true)
+    void resetIdSequence();
 }
