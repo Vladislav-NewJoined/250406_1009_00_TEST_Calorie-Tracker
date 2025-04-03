@@ -1,0 +1,19 @@
+name: Copy Repository
+
+on:
+  workflow_dispatch: # Запуск вручную
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout original repo
+        uses: actions/checkout@v3
+        with:
+          repository: ваш_аккаунт/оригинальный_репозиторий
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to new repo
+        run: |
+          git remote add new-origin https://github.com/ваш_аккаунт/новый_репозиторий.git
+          git push new-origin main
