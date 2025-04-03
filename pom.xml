@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.example</groupId>
-	<artifactId>250403_1005_00_TEST_Calorie-Track</artifactId>
+	<artifactId>250403_1326_00_TEST_Calorie-Track</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>250403_1005_00_TEST_Calorie-Track</name>
 	<description>Demo project for Spring Boot</description>
@@ -44,14 +44,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>

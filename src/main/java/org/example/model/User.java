@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Пользователи") // Имя таблицы на кириллице
+@Table(name = "ПОЛЬЗОВАТЕЛИ") // Имя таблицы на кириллице
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID") // Имя столбца на английском (H2 не поддерживает кириллицу для ID)
