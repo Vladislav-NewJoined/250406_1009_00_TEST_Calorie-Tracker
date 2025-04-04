@@ -29,40 +29,63 @@ public class Application {
 //		Для извлечения/просмотра данных из таблицы, например "БЛЮДА", в "H2 Console" нужно использовать следующий SQL запрос:
 //		SELECT * FROM "БЛЮДА";
 
+		// Информация о H2 Console
+		System.out.println("Сайт-консоль, где отображается база данных и результаты обработки базы данных: http://localhost:8080/h2-console");
+		System.out.println("При входе на страницу: http://localhost:8080/h2-console");
+		System.out.println("Укажите следующие параметры:");
+		System.out.println("Saved Settings: Generic H2 (Embedded)");
+		System.out.println("Setting Name: Generic H2 (Embedded)");
+		System.out.println("Driver Class: org.h2.Driver");
+		System.out.println("JDBC URL: jdbc:h2:mem:testdb");
+		System.out.println("User Name: sa");
+		System.out.println("Password: (оставьте поле пустым)");
+		System.out.println("После запуска главного класса база данных экспортируется в таблицу Excel, в корневую папку проекта.");
+		System.out.println("Для экспорта таблицы Excel в корневую папку проекта, зайдите в браузере по адресу: http://localhost:8080/export/excel");
+		System.out.println("Для извлечения/просмотра данных из таблицы, например \"БЛЮДА\", в \"H2 Console\" нужно использовать следующий SQL запрос: SELECT * FROM \"БЛЮДА\";");
 
 
+		// Запуск приложения
 		SpringApplication.run(Application.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner demo(UserService userService, UserRepository userRepository, ExcelExportService excelExportService) {
-//		return args -> {
-//			// Создаем тестового пользователя
-//			User user = new User();
-//			user.setName("Иван Иванов");
-//			user.setEmail("ivan@example.com");
-//			user.setAge(30);
-//			user.setWeight(80);
-//			user.setHeight(180);
-//			user.setGoal(User.Goal.LOSE_WEIGHT);
-//			user.setGender(User.Gender.MALE);
-//			user.setActivityLevel(User.ActivityLevel.MODERATELY_ACTIVE);
-//
-//			// Сохраняем пользователя в базу данных
-//			userRepository.save(user);
-//
-//			// Рассчитываем дневную норму калорий
-//			double dailyCalories = userService.calculateDailyCalories(user);
-//			String formattedCalories = String.format("%.2f", dailyCalories);
-//			System.out.println("Для пользователя: " + user.getName() + ", рассчитанная дневная норма калорий: " + formattedCalories + " калорий");
-//
-//			// Экспорт таблицы ПОЛЬЗОВАТЕЛИ в Excel
-//			try {
-//				excelExportService.exportToExcel();
-//				System.out.println("Таблица ПОЛЬЗОВАТЕЛИ успешно экспортирована в Excel.");
-//			} catch (Exception e) {
-//				System.err.println("Ошибка при экспорте таблицы в Excel: " + e.getMessage());
-//			}
-//		};
-//	}
+	@Bean
+	public CommandLineRunner demo(UserService userService, UserRepository userRepository, ExcelExportService excelExportService) {
+		return args -> {
+			// Удаляем все старые строки
+			userRepository.deleteAll();
+			System.out.println("Удалены все старые строки из таблицы ПОЛЬЗОВАТЕЛИ.");
+
+			// Сбрасываем счётчик ID
+			userRepository.resetIdSequence();
+			System.out.println("Счётчик ID сброшен. Новые строки будут начинаться с ID = 1.");
+
+			// Создаем тестового пользователя
+			User user = new User();
+			user.setName("Иван Иванов");
+			user.setEmail("ivan@example.com");
+			user.setAge(30);
+			user.setWeight(80.0);
+			user.setHeight(180.0);
+			user.setGoal(User.Goal.LOSE_WEIGHT);
+			user.setGender(User.Gender.MALE);
+			user.setActivityLevel(User.ActivityLevel.MODERATELY_ACTIVE);
+
+			// Сохраняем пользователя в базу данных
+			userRepository.save(user);
+			System.out.println("Добавлена новая строка в таблицу ПОЛЬЗОВАТЕЛИ вместо старой строки.");
+
+			// Рассчитываем дневную норму калорий
+			double dailyCalories = userService.calculateDailyCalories(user);
+			String formattedCalories = String.format("%.2f", dailyCalories);
+			System.out.println("Для пользователя: " + user.getName() + ", рассчитанная дневная норма калорий: " + formattedCalories + " калорий");
+
+			// Экспорт таблицы ПОЛЬЗОВАТЕЛИ в Excel
+			try {
+				excelExportService.exportToExcel();
+				System.out.println("Таблица ПОЛЬЗОВАТЕЛИ успешно экспортирована в Excel.");
+			} catch (Exception e) {
+				System.err.println("Ошибка при экспорте таблицы в Excel: " + e.getMessage());
+			}
+		};
+	}
 }
