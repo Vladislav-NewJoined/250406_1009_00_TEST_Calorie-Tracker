@@ -101,6 +101,9 @@ public class Application {
 			} catch (IOException e) {
 				System.err.println("Ошибка при экспорте таблицы в Excel: " + e.getMessage());
 			}
+
+			// Генерация отчёта
+			ReportGenerator.generateReport();
 		};
 	}
 }
