@@ -3,11 +3,15 @@ package org.example;
 import org.example.model.User;
 import org.example.repository.UserRepository;
 import org.example.service.ExcelExportService;
+import org.example.service.TextExportService;
 import org.example.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.io.IOException;
+import java.time.LocalDate;
 
 @SpringBootApplication(scanBasePackages = {"org.example", "org.example.config"})
 public class Application {
@@ -43,13 +47,12 @@ public class Application {
 		System.out.println("Для экспорта таблицы Excel в корневую папку проекта, зайдите в браузере по адресу: http://localhost:8080/export/excel");
 		System.out.println("Для извлечения/просмотра данных из таблицы, например \"БЛЮДА\", в \"H2 Console\" нужно использовать следующий SQL запрос: SELECT * FROM \"БЛЮДА\";");
 
-
 		// Запуск приложения
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner demo(UserService userService, UserRepository userRepository, ExcelExportService excelExportService) {
+	public CommandLineRunner demo(UserService userService, UserRepository userRepository, ExcelExportService excelExportService, TextExportService textExportService) {
 		return args -> {
 			// Удаляем все старые строки
 			userRepository.deleteAll();
@@ -69,6 +72,7 @@ public class Application {
 			user.setGoal(User.Goal.LOSE_WEIGHT);
 			user.setGender(User.Gender.MALE);
 			user.setActivityLevel(User.ActivityLevel.MODERATELY_ACTIVE);
+			user.setDate(LocalDate.of(2025, 3, 1)); // Устанавливаем значение для нового столбца
 
 			// Сохраняем пользователя в базу данных
 			userRepository.save(user);
@@ -77,13 +81,24 @@ public class Application {
 			// Рассчитываем дневную норму калорий
 			double dailyCalories = userService.calculateDailyCalories(user);
 			String formattedCalories = String.format("%.2f", dailyCalories);
-			System.out.println("Для пользователя: " + user.getName() + ", рассчитанная дневная норма калорий: " + formattedCalories + " калорий");
+			String message = "Для пользователя: " + user.getName() + ", рассчитанная дневная норма калорий: " + formattedCalories + " калорий";
+
+			// Выводим фразу в консоль
+			System.out.println(message);
+
+			// Записываем фразу в текстовый файл
+			try {
+				String fileName = textExportService.exportToText(message);
+				System.out.println("Фраза успешно записана в текстовый файл: " + fileName);
+			} catch (IOException e) {
+				System.err.println("Ошибка при записи в текстовый файл: " + e.getMessage());
+			}
 
 			// Экспорт таблицы ПОЛЬЗОВАТЕЛИ в Excel
 			try {
 				excelExportService.exportToExcel();
 				System.out.println("Таблица ПОЛЬЗОВАТЕЛИ успешно экспортирована в Excel.");
-			} catch (Exception e) {
+			} catch (IOException e) {
 				System.err.println("Ошибка при экспорте таблицы в Excel: " + e.getMessage());
 			}
 		};
