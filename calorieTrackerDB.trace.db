@@ -3047,3 +3047,336 @@ VALUES ('Иван Иванов', 'ivan@example.com', 30, 80, 180, 'LOSE_WEIGHT',
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-05 10:40:02.504057+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "-- Шаг 1: Копируем данные первой строки во временную таблицу\000d\000aWITH deleted_row AS (\000d\000a    [*]DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a    WHERE ""ID"" = (\000d\000a        SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a    )\000d\000a    RETURNING *\000d\000a)\000d\000a\000d\000a-- Шаг 2: Добавляем две новые строки на основе данных из первой строки\000d\000aINSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"", \000d\000a    ""Калории на порцию"", ""Углеводы"", ""Жиры"", ""Название"", ""Белки"", ""Возраст"", ""Дата""\000d\000a)\000d\000aSELECT\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"",\000d\000a    68, 12, 1.4, 'Овсянка', 2.4, ""Возраст"", '2025-03-01'::DATE\000d\000aFROM deleted_row\000d\000aUNION ALL\000d\000aSELECT\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"",\000d\000a    52, 14, 0.2, 'Яблоки', 0.3, ""Возраст"", '2025-03-01'::DATE\000d\000aFROM deleted_row"; ожидалось "WITH, (, SELECT, TABLE, VALUES"
+Syntax error in SQL statement "-- Шаг 1: Копируем данные первой строки во временную таблицу\000d\000aWITH deleted_row AS (\000d\000a    [*]DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a    WHERE ""ID"" = (\000d\000a        SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a    )\000d\000a    RETURNING *\000d\000a)\000d\000a\000d\000a-- Шаг 2: Добавляем две новые строки на основе данных из первой строки\000d\000aINSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"", \000d\000a    ""Калории на порцию"", ""Углеводы"", ""Жиры"", ""Название"", ""Белки"", ""Возраст"", ""Дата""\000d\000a)\000d\000aSELECT\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"",\000d\000a    68, 12, 1.4, 'Овсянка', 2.4, ""Возраст"", '2025-03-01'::DATE\000d\000aFROM deleted_row\000d\000aUNION ALL\000d\000aSELECT\000d\000a    ""Имя"", ""Email"", ""Цель"", ""Рост (см)"", ""Вес (кг)"", ""Уровень активности"", ""Пол"",\000d\000a    52, 14, 0.2, 'Яблоки', 0.3, ""Возраст"", '2025-03-01'::DATE\000d\000aFROM deleted_row"; expected "WITH, (, SELECT, TABLE, VALUES"; SQL statement:
+-- Шаг 1: Копируем данные первой строки во временную таблицу
+WITH deleted_row AS (
+    DELETE FROM "ПОЛЬЗОВАТЕЛИ"
+    WHERE "ID" = (
+        SELECT MIN("ID") FROM "ПОЛЬЗОВАТЕЛИ"
+    )
+    RETURNING *
+)
+
+-- Шаг 2: Добавляем две новые строки на основе данных из первой строки
+INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол", 
+    "Калории на порцию", "Углеводы", "Жиры", "Название", "Белки", "Возраст", "Дата"
+)
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    68, 12, 1.4, 'Овсянка', 2.4, "Возраст", '2025-03-01'::DATE
+FROM deleted_row
+UNION ALL
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    52, 14, 0.2, 'Яблоки', 0.3, "Возраст", '2025-03-01'::DATE
+FROM deleted_row [42001-232]
+2025-04-05 10:45:55.947483+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "Имя" не найден
+Column "Имя" not found; SQL statement:
+-- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы
+INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    "Калории на порцию", "Углеводы", "Жиры", "Название", "Белки", "Возраст", "Дата"
+)
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    68, 12, 1.4, 'Овсянка', 2.4, "Возраст", '2025-03-01'::DATE
+FROM temp_user
+UNION ALL
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    52, 14, 0.2, 'Яблоки', 0.3, "Возраст", '2025-03-01'::DATE
+FROM temp_user [42122-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:786)
+	at org.h2.command.Parser.parseColumn(Parser.java:1171)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
+	at org.h2.command.Parser.parseInsert(Parser.java:1530)
+	at org.h2.command.Parser.parsePrepared(Parser.java:698)
+	at org.h2.command.Parser.parse(Parser.java:581)
+	at org.h2.command.Parser.parse(Parser.java:556)
+	at org.h2.command.Parser.prepareCommand(Parser.java:484)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp.query(WebApp.java:1118)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
+	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-05 10:46:53.200281+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "Имя" не найден
+Column "Имя" not found; SQL statement:
+-- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы
+INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    "Калории на порцию", "Углеводы", "Жиры", "Название", "Белки", "Возраст", "Дата"
+)
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    68, 12, 1.4, 'Овсянка', 2.4, "Возраст", '2025-03-01'::DATE
+FROM temp_user
+UNION ALL
+SELECT
+    "Имя", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    52, 14, 0.2, 'Яблоки', 0.3, "Возраст", '2025-03-01'::DATE
+FROM temp_user [42122-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:786)
+	at org.h2.command.Parser.parseColumn(Parser.java:1171)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
+	at org.h2.command.Parser.parseInsert(Parser.java:1530)
+	at org.h2.command.Parser.parsePrepared(Parser.java:698)
+	at org.h2.command.Parser.parse(Parser.java:581)
+	at org.h2.command.Parser.parse(Parser.java:556)
+	at org.h2.command.Parser.prepareCommand(Parser.java:484)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp.query(WebApp.java:1118)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
+	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-05 10:52:10.396781+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Столбец "Email" не найден
+Column "Email" not found; SQL statement:
+-- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы
+INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+    "ИМЯ", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    "Калории на порцию", "Углеводы", "Жиры", "Название", "Белки", "Возраст", "Дата"
+)
+SELECT
+    "ИМЯ", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    68, 12, 1.4, 'Овсянка', 2.4, "Возраст", '2025-03-01'::DATE
+FROM temp_user
+UNION ALL
+SELECT
+    "ИМЯ", "Email", "Цель", "Рост (см)", "Вес (кг)", "Уровень активности", "Пол",
+    52, 14, 0.2, 'Яблоки', 0.3, "Возраст", '2025-03-01'::DATE
+FROM temp_user [42122-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:786)
+	at org.h2.command.Parser.parseColumn(Parser.java:1171)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1156)
+	at org.h2.command.Parser.parseInsert(Parser.java:1530)
+	at org.h2.command.Parser.parsePrepared(Parser.java:698)
+	at org.h2.command.Parser.parse(Parser.java:581)
+	at org.h2.command.Parser.parse(Parser.java:556)
+	at org.h2.command.Parser.prepareCommand(Parser.java:484)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp.query(WebApp.java:1118)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
+	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-05 10:53:58.922653+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "ПОЛЬЗОВАТЕЛИ\000d\000a" не найдена
+Table "ПОЛЬЗОВАТЕЛИ\000d\000a" not found; SQL statement:
+SELECT * FROM "ПОЛЬЗОВАТЕЛИ
+" [42102-232]
+2025-04-05 11:05:21.198973+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "-- Шаг 0: Проверяем, есть ли данные в таблице\000d\000a[*]DO $$\000d\000aBEGIN\000d\000a    IF EXISTS (SELECT 1 FROM ""ПОЛЬЗОВАТЕЛИ"" LIMIT 1) THEN\000d\000a        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки\000d\000a        CREATE TEMPORARY TABLE temp_user AS\000d\000a        SELECT * FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 2: Удаляем первую строку\000d\000a        DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы\000d\000a        INSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            ""калории на порцию"", ""УГЛЕВОДЫ"", ""ЖИРЫ"", ""НАЗВАНИЕ"", ""БЕЛКИ"", ""ВОЗРАСТ"", ""ДАТА""\000d\000a        )\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            68, 12, 1.4, 'Овсянка', 2.4, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user\000d\000a        UNION ALL\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            52, 14, 0.2, 'Яблоки', 0.3, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user;\000d\000a\000d\000a        -- Шаг 4: Удаляем временную таблицу\000d\000a        DROP TABLE temp_user;\000d\000a    ELSE\000d\000a        RAISE NOTICE 'Таблица ""ПОЛЬЗОВАТЕЛИ"" пуста. Нет данных для обработки.';\000d\000a    END IF;\000d\000aEND $$"; ожидалось "DELETE, DROP"
+Syntax error in SQL statement "-- Шаг 0: Проверяем, есть ли данные в таблице\000d\000a[*]DO $$\000d\000aBEGIN\000d\000a    IF EXISTS (SELECT 1 FROM ""ПОЛЬЗОВАТЕЛИ"" LIMIT 1) THEN\000d\000a        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки\000d\000a        CREATE TEMPORARY TABLE temp_user AS\000d\000a        SELECT * FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 2: Удаляем первую строку\000d\000a        DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы\000d\000a        INSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            ""калории на порцию"", ""УГЛЕВОДЫ"", ""ЖИРЫ"", ""НАЗВАНИЕ"", ""БЕЛКИ"", ""ВОЗРАСТ"", ""ДАТА""\000d\000a        )\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            68, 12, 1.4, 'Овсянка', 2.4, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user\000d\000a        UNION ALL\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            52, 14, 0.2, 'Яблоки', 0.3, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user;\000d\000a\000d\000a        -- Шаг 4: Удаляем временную таблицу\000d\000a        DROP TABLE temp_user;\000d\000a    ELSE\000d\000a        RAISE NOTICE 'Таблица ""ПОЛЬЗОВАТЕЛИ"" пуста. Нет данных для обработки.';\000d\000a    END IF;\000d\000aEND $$"; expected "DELETE, DROP"; SQL statement:
+-- Шаг 0: Проверяем, есть ли данные в таблице
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM "ПОЛЬЗОВАТЕЛИ" LIMIT 1) THEN
+        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки
+        CREATE TEMPORARY TABLE temp_user AS
+        SELECT * FROM "ПОЛЬЗОВАТЕЛИ"
+        WHERE "ID" = (SELECT MIN("ID") FROM "ПОЛЬЗОВАТЕЛИ");
+
+        -- Шаг 2: Удаляем первую строку
+        DELETE FROM "ПОЛЬЗОВАТЕЛИ"
+        WHERE "ID" = (SELECT MIN("ID") FROM "ПОЛЬЗОВАТЕЛИ");
+
+        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы
+        INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            "калории на порцию", "УГЛЕВОДЫ", "ЖИРЫ", "НАЗВАНИЕ", "БЕЛКИ", "ВОЗРАСТ", "ДАТА"
+        )
+        SELECT
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            68, 12, 1.4, 'Овсянка', 2.4, "ВОЗРАСТ", '2025-03-01'::DATE
+        FROM temp_user
+        UNION ALL
+        SELECT
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            52, 14, 0.2, 'Яблоки', 0.3, "ВОЗРАСТ", '2025-03-01'::DATE
+        FROM temp_user;
+
+        -- Шаг 4: Удаляем временную таблицу
+        DROP TABLE temp_user;
+    ELSE
+        RAISE NOTICE 'Таблица "ПОЛЬЗОВАТЕЛИ" пуста. Нет данных для обработки.';
+    END IF;
+END $$ [42001-232]
+2025-04-05 11:07:50.927432+03:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "-- Шаг 0: Проверяем, есть ли данные в таблице\000d\000a[*]DO $$\000d\000aBEGIN\000d\000a    IF EXISTS (SELECT 1 FROM ""ПОЛЬЗОВАТЕЛИ"" LIMIT 1) THEN\000d\000a        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки\000d\000a        CREATE TEMPORARY TABLE temp_user AS\000d\000a        SELECT * FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 2: Удаляем первую строку\000d\000a        DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы\000d\000a        INSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            ""калории на порцию"", ""УГЛЕВОДЫ"", ""ЖИРЫ"", ""НАЗВАНИЕ"", ""БЕЛКИ"", ""ВОЗРАСТ"", ""ДАТА""\000d\000a        )\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            68, 12, 1.4, 'Овсянка', 2.4, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user\000d\000a        UNION ALL\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            52, 14, 0.2, 'Яблоки', 0.3, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user;\000d\000a\000d\000a        -- Шаг 4: Удаляем временную таблицу\000d\000a        DROP TABLE temp_user;\000d\000a    ELSE\000d\000a        RAISE NOTICE 'Таблица ""ПОЛЬЗОВАТЕЛИ"" пуста. Нет данных для обработки.';\000d\000a    END IF;\000d\000aEND $$"; ожидалось "DELETE, DROP"
+Syntax error in SQL statement "-- Шаг 0: Проверяем, есть ли данные в таблице\000d\000a[*]DO $$\000d\000aBEGIN\000d\000a    IF EXISTS (SELECT 1 FROM ""ПОЛЬЗОВАТЕЛИ"" LIMIT 1) THEN\000d\000a        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки\000d\000a        CREATE TEMPORARY TABLE temp_user AS\000d\000a        SELECT * FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 2: Удаляем первую строку\000d\000a        DELETE FROM ""ПОЛЬЗОВАТЕЛИ""\000d\000a        WHERE ""ID"" = (SELECT MIN(""ID"") FROM ""ПОЛЬЗОВАТЕЛИ"");\000d\000a\000d\000a        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы\000d\000a        INSERT INTO ""ПОЛЬЗОВАТЕЛИ"" (\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            ""калории на порцию"", ""УГЛЕВОДЫ"", ""ЖИРЫ"", ""НАЗВАНИЕ"", ""БЕЛКИ"", ""ВОЗРАСТ"", ""ДАТА""\000d\000a        )\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            68, 12, 1.4, 'Овсянка', 2.4, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user\000d\000a        UNION ALL\000d\000a        SELECT\000d\000a            ""ИМЯ"", ""EMAIL"", ""ЦЕЛЬ"", ""рост (см)"", ""вес (кг)"", ""уровень активности"", ""ПОЛ"",\000d\000a            52, 14, 0.2, 'Яблоки', 0.3, ""ВОЗРАСТ"", '2025-03-01'::DATE\000d\000a        FROM temp_user;\000d\000a\000d\000a        -- Шаг 4: Удаляем временную таблицу\000d\000a        DROP TABLE temp_user;\000d\000a    ELSE\000d\000a        RAISE NOTICE 'Таблица ""ПОЛЬЗОВАТЕЛИ"" пуста. Нет данных для обработки.';\000d\000a    END IF;\000d\000aEND $$"; expected "DELETE, DROP"; SQL statement:
+-- Шаг 0: Проверяем, есть ли данные в таблице
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM "ПОЛЬЗОВАТЕЛИ" LIMIT 1) THEN
+        -- Шаг 1: Создаем временную таблицу и копируем данные первой строки
+        CREATE TEMPORARY TABLE temp_user AS
+        SELECT * FROM "ПОЛЬЗОВАТЕЛИ"
+        WHERE "ID" = (SELECT MIN("ID") FROM "ПОЛЬЗОВАТЕЛИ");
+
+        -- Шаг 2: Удаляем первую строку
+        DELETE FROM "ПОЛЬЗОВАТЕЛИ"
+        WHERE "ID" = (SELECT MIN("ID") FROM "ПОЛЬЗОВАТЕЛИ");
+
+        -- Шаг 3: Добавляем две новые строки на основе данных из временной таблицы
+        INSERT INTO "ПОЛЬЗОВАТЕЛИ" (
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            "калории на порцию", "УГЛЕВОДЫ", "ЖИРЫ", "НАЗВАНИЕ", "БЕЛКИ", "ВОЗРАСТ", "ДАТА"
+        )
+        SELECT
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            68, 12, 1.4, 'Овсянка', 2.4, "ВОЗРАСТ", '2025-03-01'::DATE
+        FROM temp_user
+        UNION ALL
+        SELECT
+            "ИМЯ", "EMAIL", "ЦЕЛЬ", "рост (см)", "вес (кг)", "уровень активности", "ПОЛ",
+            52, 14, 0.2, 'Яблоки', 0.3, "ВОЗРАСТ", '2025-03-01'::DATE
+        FROM temp_user;
+
+        -- Шаг 4: Удаляем временную таблицу
+        DROP TABLE temp_user;
+    ELSE
+        RAISE NOTICE 'Таблица "ПОЛЬЗОВАТЕЛИ" пуста. Нет данных для обработки.';
+    END IF;
+END $$ [42001-232]
