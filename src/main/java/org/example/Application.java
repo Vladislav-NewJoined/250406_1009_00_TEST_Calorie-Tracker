@@ -17,35 +17,20 @@ import java.time.LocalDate;
 public class Application {
 	public static void main(String[] args) {
 
-//		Сайт-консоль, где отображается база данных и результаты обработки базы данных: http://localhost:8080/h2-console
-//		При входе на страницу: http://localhost:8080/h2-console
-//		Укажите следующие параметры:
-//		Saved Settings: Generic H2 (Embedded)
-//		Setting Name: Generic H2 (Embedded)
-//		Driver Class: org.h2.Driver
-//		JDBC URL: jdbc:h2:mem:testdb
-//		User Name: sa
-//		Password: (оставьте поле пустым)
-//		После запуска главного класса база данных экспортируется
-//		в таблицу Excel, в корневую папку проекта. Таблица называется: calorieTrackerData_20250320.xlsx
-//		Для экспорта таблицы Excel в корневую папку проекта, зайдите  в браузере по адресу:
-//		http://localhost:8080/export/excel
-//		Для извлечения/просмотра данных из таблицы, например "БЛЮДА", в "H2 Console" нужно использовать следующий SQL запрос:
-//		SELECT * FROM "БЛЮДА";
-
 		// Информация о H2 Console
+		System.out.println("ВНИМАНИЕ: 	Инструкция по использованию программного кода этого проекта находится в файле:  README_ИНСТРУКЦИИ.txt, в корневой папке проекта");
 		System.out.println("Сайт-консоль, где отображается база данных и результаты обработки базы данных: http://localhost:8080/h2-console");
 		System.out.println("При входе на страницу: http://localhost:8080/h2-console");
 		System.out.println("Укажите следующие параметры:");
 		System.out.println("Saved Settings: Generic H2 (Embedded)");
 		System.out.println("Setting Name: Generic H2 (Embedded)");
 		System.out.println("Driver Class: org.h2.Driver");
-		System.out.println("JDBC URL: jdbc:h2:mem:testdb");
+		System.out.println("JDBC URL: jdbc:h2:file:./calorieTrackerDB");
 		System.out.println("User Name: sa");
 		System.out.println("Password: (оставьте поле пустым)");
 		System.out.println("После запуска главного класса база данных экспортируется в таблицу Excel, в корневую папку проекта.");
 		System.out.println("Для экспорта таблицы Excel в корневую папку проекта, зайдите в браузере по адресу: http://localhost:8080/export/excel");
-		System.out.println("Для извлечения/просмотра данных из таблицы, например \"БЛЮДА\", в \"H2 Console\" нужно использовать следующий SQL запрос: SELECT * FROM \"БЛЮДА\";");
+		System.out.println("Для извлечения/просмотра данных из таблицы, например \"ПОЛЬЗОВАТЕЛИ\", в \"H2 Console\" нужно использовать следующий SQL запрос: SELECT * FROM \"ПОЛЬЗОВАТЕЛИ\";");
 
 		// Запуск приложения
 		SpringApplication.run(Application.class, args);
